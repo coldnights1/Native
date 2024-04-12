@@ -1,118 +1,125 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from "react";
+import { View, ScrollView, TextInput, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const ProfileInfo = ({ name, profilePic }) => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.profileContainer}>
+      <Image source={{ uri: profilePic }} style={styles.profilePic} />
+      <Text style={styles.profileName}>{name}</Text>
     </View>
   );
-}
+};
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App(){
+  const [answer, setAnswer] = useState('');
+  const [answers, setAnswers] = useState([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handleAddAnswer = () => {
+    if (answer.trim() !== '') {
+      setAnswers(prevAnswers => [...prevAnswers, answer]);
+      setAnswer('');
+    }
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView style={styles.container}>
+      <ProfileInfo name="John Doe" profilePic="https://via.placeholder.com/150" />
+      <View style={styles.questionContainer}>
+        <Text style={styles.label}>Question:</Text>
+        <Text style={styles.questionText}>
+          What is the capital of France?
+        </Text>
+      </View>
+      <View style={styles.answerContainer}>
+        <TextInput
+          style={styles.answerInput}
+          onChangeText={setAnswer}
+          value={answer}
+          placeholder="Enter your answer..."
+          placeholderTextColor="#999"
+          multiline={true}
+        />
+        <TouchableOpacity onPress={handleAddAnswer} style={styles.addButton}>
+          <Text style={styles.addButtonText}>Add Answer</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.answersContainer}>
+        <Text style={styles.label}>Answers:</Text>
+        {answers.length === 0 ? (
+          <Text>No answers yet</Text>
+        ) : (
+          answers.map((ans, index) => (
+            <Text key={index} style={styles.answer}>
+              {ans}
+            </Text>
+          ))
+        )}
+      </View>
+    </ScrollView>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    padding: 20,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  profileContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
   },
-  sectionDescription: {
-    marginTop: 8,
+  profilePic: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  profileName: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  questionContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  questionText: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "bold",
+    textAlign: "center",
   },
-  highlight: {
-    fontWeight: '700',
+  answerContainer: {
+    marginBottom: 20,
+  },
+  answerInput: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    minHeight: 100,
+    marginBottom: 10,
+  },
+  addButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  answersContainer: {
+    marginBottom: 20,
+  },
+  answer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
 });
-
-export default App;
