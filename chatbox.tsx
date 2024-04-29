@@ -5,14 +5,21 @@ const ProfileInfo = () => {
   return (
     <View style={styles.profileContainer}>
       <Image source={{ uri: "https://i.pravatar.cc/150?u=1" }} style={styles.profilePic} />
-      <Text style={styles.profileName}>John Doe</Text>
     </View>
   );
 };
 
-export default function App(){
+const ChatBubble = ({ message, isCurrentUser }) => {
+  return (
+    <View style={[styles.chatBubble, isCurrentUser && styles.currentUserBubble]}>
+      <Text style={[styles.chatText, isCurrentUser && styles.currentUserText]}>{message}</Text>
+    </View>
+  );
+};
+const chatbox=()=>{
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const [chattingWithName, setChattingWithName] = useState('John Doe'); // Name of the person we are chatting with
 
   const sendMessage = () => {
     if (messageInput.trim() !== '') {
@@ -25,14 +32,20 @@ export default function App(){
 
   return (
     <View style={styles.container}>
+      {/* Bar displaying the name of the person we are chatting with */}
+      <View style={styles.chatBar}>
+        <Text style={styles.chattingWithName}>{chattingWithName}</Text>
+      </View>
+
       <ScrollView style={styles.messagesContainer}>
         {messages.map((msg, index) => (
-          <View key={index}>
+          <View key={index} style={styles.messageContainer}>
             <ProfileInfo />
-            <Text style={styles.message}>{msg}</Text>
+            <ChatBubble message={msg} isCurrentUser={false} />
           </View>
         ))}
       </ScrollView>
+      
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -52,11 +65,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  chatBar: {
+    backgroundColor: "#007bff",
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  chattingWithName: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   messagesContainer: {
     flex: 1,
     padding: 10,
   },
-  message: {
+  messageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
   inputContainer: {
@@ -85,18 +110,35 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   profileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 5,
-  },
-  profilePic: {
     width: 30,
     height: 30,
     borderRadius: 15,
     marginRight: 10,
   },
-  profileName: {
-    fontSize: 14,
-    fontWeight: "bold",
+  profilePic: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 15,
+  },
+  chatBubble: {
+    backgroundColor: "#007bff", // Change color to blue
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 10,
+    maxWidth: "80%",
+  },
+
+  currentUserBubble: {
+    alignSelf: "flex-end",
+    backgroundColor: "#007bff",
+  },
+  chatText: {
+    fontSize: 16,
+    color: "#000",
+  },
+  currentUserText: {
+    color: "#fff",
   },
 });
+export default chatbox;

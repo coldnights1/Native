@@ -10,7 +10,7 @@ const chatParticipants = [
   // Add more participants as needed
 ];
 
-export default function App() {
+const outsidechatbox=()=>{
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Experts</Text>
@@ -55,3 +55,4 @@ const styles = StyleSheet.create({
     color: "#fff", // White color text
   },
 });
+export default outsidechatbox;
