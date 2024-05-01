@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 
-export default function App() {
+const appointment=()=> {
   // Dummy data for doctors
   const doctors = [
     {
@@ -106,3 +106,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+export default appointment;
